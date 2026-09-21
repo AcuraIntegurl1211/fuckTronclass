@@ -1,0 +1,18 @@
+import path from 'path';
+import url from 'url';
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
+	entry: path.resolve(__dirname, 'src/main.js'),
+	outDir: path.resolve(__dirname, 'dist'),
+	devOutDir: path.resolve(__dirname, 'dev'),
+	userscript: {
+		name: '畅课 Hack',
+		version: '1.6.0',
+		include: /^https?:\/\/courses\.cuc\.edu\.cn\//,
+		url: 'https://github.com/AcuraIntegurl1211/fuckTronclass/raw/main/dist/main.user.js',
+		grants: ['unsafeWindow'],
+	},
+};
