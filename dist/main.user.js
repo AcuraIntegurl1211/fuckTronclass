@@ -4,7 +4,9 @@
 // @version     1.6.1
 // @include     /^https?:\/\/courses\.cuc\.edu\.cn\//
 // @match       *://courses.cuc.edu.cn/*
+// @downloadURL https://github.com/AcuraIntegurl1211/fuckTronclass/raw/main/dist/main.user.js
 // @grant       unsafeWindow
+// @updateURL   https://github.com/AcuraIntegurl1211/fuckTronclass/raw/main/dist/main.user.js
 // ==/UserScript==
 
 /*! For license information please see main.js.LICENSE.txt */

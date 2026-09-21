@@ -40,7 +40,7 @@ export default {
 				include: /^https?:\/\/courses\.cuc\.edu\.cn\//.toString(),
 				match: ['*://courses.cuc.edu.cn/*'],
 			},
-			downloadBaseUrl: 'https://github.com/AcuraIntegurl1211/fuckTronclass/raw/main/dist/main.user.js',
+			downloadBaseURL: 'https://github.com/AcuraIntegurl1211/fuckTronclass/raw/main/dist/main.user.js',
 			metajs: false,
 			renameExt: true,
 			pretty: true,
