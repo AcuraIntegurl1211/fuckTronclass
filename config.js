@@ -10,7 +10,7 @@ export default {
 	devOutDir: path.resolve(__dirname, 'dev'),
 	userscript: {
 		name: '畅课 Hack',
-		version: '1.6.0',
+		version: '1.6.1',
 		include: /^https?:\/\/courses\.cuc\.edu\.cn\//,
 		url: 'https://github.com/AcuraIntegurl1211/fuckTronclass/raw/main/dist/main.user.js',
 		grants: ['unsafeWindow'],

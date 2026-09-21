@@ -470,75 +470,24 @@ _.assign(Hack, {
 
 		line('课程', hack.course?.name ?? '未知');
 		line('视频数', hack.videos?.length ?? 0);
-		const rateLine = line('倍速', hack.currentRate ?? 10);
+		line('倍速', hack.currentRate ?? 10);
 
 		const controls = document.createElement('div');
 		controls.className = 'hack-controls';
-
-		const setRate = rate => {
-			hack.currentRate = rate;
-			rateLine.textContent = `倍速：${rate}`;
-			try {
-				if(hack.video)
-					hack.video.playbackRate = rate;
-			} catch(err) {
-				console.warn('[畅课 Hack] playbackRate failed', err);
-			}
-		};
-
-		for(const rate of [1, 2, 4, 10, 16]) {
-			const button = document.createElement('button');
-			button.textContent = `${rate}x`;
-			button.onclick = () => setRate(rate);
-			controls.appendChild(button);
-		}
-
-		const skip = document.createElement('button');
-		skip.textContent = '跳到结尾';
-		skip.onclick = () => {
-			try {
-				if(hack.video)
-					hack.video.currentTime = hack.video.duration;
-			} catch(err) {
-				console.warn('[畅课 Hack] seek failed', err);
-			}
-		};
-		controls.appendChild(skip);
-
-		const pauseToggle = document.createElement('button');
-		pauseToggle.textContent = '屏蔽暂停：关';
-		pauseToggle.onclick = () => {
-			hack.blockPause = !hack.blockPause;
-			pauseToggle.textContent = `屏蔽暂停：${hack.blockPause ? '开' : '关'}`;
-		};
-		controls.appendChild(pauseToggle);
 
 		const complete = document.createElement('button');
 		complete.textContent = '一键完成';
 		complete.onclick = async () => {
 			status.textContent = '上报中…';
-			const result = await hack.CompleteCurrentVideo();
-			status.textContent = result;
+			status.textContent = await hack.CompleteCurrentVideo();
 		};
 		controls.appendChild(complete);
-
-		const autoToggle = document.createElement('button');
-		autoToggle.textContent = `自动完成：${hack.autoComplete ? '开' : '关'}`;
-		autoToggle.onclick = async () => {
-			hack.autoComplete = !hack.autoComplete;
-			autoToggle.textContent = `自动完成：${hack.autoComplete ? '开' : '关'}`;
-			if(hack.autoComplete) {
-				status.textContent = '自动上报中…';
-				status.textContent = await hack.CompleteCurrentVideo();
-			}
-		};
-		controls.appendChild(autoToggle);
 
 		wrap.appendChild(controls);
 
 		const status = document.createElement('p');
 		status.className = 'log hack-status';
-		status.textContent = '默认仅提速；「一键完成」按 ≤120s 分段上报';
+		status.textContent = '按 ≤120s 分段上报观看进度';
 		wrap.appendChild(status);
 
 		// Network capture: shows the requests the site actually sends so the
@@ -561,32 +510,17 @@ _.assign(Hack, {
 
 		const render = () => {
 			sniffTitle.textContent = `—— 捕获的请求（${(hack.captured || []).length}）——`;
-			sniffBox.value = buildText();
-		};
-
-		const refresh = document.createElement('button');
-		refresh.textContent = '刷新捕获';
-		refresh.onclick = render;
-		controls.appendChild(refresh);
-
-		const copy = document.createElement('button');
-		copy.textContent = '复制全部';
-		copy.onclick = async () => {
 			const text = buildText();
-			try {
-				await navigator.clipboard.writeText(text);
-				copy.textContent = '已复制!';
-			} catch(err) {
-				sniffBox.focus();
-				sniffBox.select();
-				document.execCommand('copy');
-				copy.textContent = '已复制!';
-			}
-			setTimeout(() => { copy.textContent = '复制全部'; }, 1500);
+			if(sniffBox.value !== text)
+				sniffBox.value = text;
 		};
-		controls.appendChild(copy);
 
 		render();
+		// Auto-refresh, but never while you are selecting text in the box.
+		setInterval(() => {
+			if(document.activeElement !== sniffBox)
+				render();
+		}, 2000);
 
 		return [wrap];
 	},
